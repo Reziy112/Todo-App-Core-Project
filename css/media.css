@@ -1,0 +1,176 @@
+/* 
+  TODO (v2):
+  Перенести media-запросы ближе к компонентам
+  Сейчас хранится отдельно для простоты
+*/
+
+
+
+@media(max-width: 960px) {
+   body.sidebar-open .overlay {
+      opacity: 1;
+      pointer-events: auto;
+   }
+
+   .sidebar {
+      position: fixed;
+      z-index: 200;
+      transform: translateX(-360px);
+   }
+
+   .sidebar[data-open="true"] {
+      transform: translateX(0);
+      width: min(360px, 90vw);
+   }
+}
+
+
+@media(max-width: 720px) {
+   .icon--lg {
+      width: 32px;
+      height: 32px;
+   }
+
+   body {
+      font-size: clamp(1rem, 0.6rem + 2vw, 1.5rem);
+   }
+
+   .screen__header {
+
+      margin-bottom: clamp(2rem, 0.6rem + 7vw, 3.75rem);
+   }
+
+   .screen__title {
+      font-size: clamp(2rem, 1.2rem + 4vw, 3rem);
+   }
+
+   .screen__subtitle {
+      font-size: clamp(1rem, 0.6rem + 2vw, 1.5rem);
+   }
+
+   .tasks__input {
+      padding: 0.5rem 1rem 0.5rem 0.5rem;
+      line-height: 1;
+      font-size: 1rem;
+   }
+
+   .tasks__add-btn {
+      font-size: 1rem;
+      flex-shrink: 0;
+      gap: 0;
+   }
+
+   .tasks__add-btn::before {
+      content: "";
+   }
+}
+
+
+@media(max-width: 560px) {
+   .tasks__form {
+      gap: 0;
+      margin-bottom: 1.75rem;
+   }
+
+   .tasks__input {
+      flex-grow: 1;
+      flex-shrink: 1;
+      padding: 0.5rem;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+   }
+
+   .tasks__input::placeholder {
+      font-size: 0.85rem;
+   }
+
+   .tasks__add-btn {
+      font-size: 0.85rem;
+      min-inline-size: 80px;
+      max-inline-size: 40%;
+      padding-block: 0.5rem;
+      padding-inline: 0.75rem;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+   }
+
+   .tasks__add-btn::before {
+      content: "";
+   }
+
+   .tasks__empty {
+      justify-content: flex-start;
+      padding-block: 2rem;
+      gap: 0;
+   }
+
+   .tasks--empty .tasks__controls {
+      margin-bottom: 0;
+   }
+
+   .tasks__empty-img {
+      width: 60%;
+   }
+
+}
+
+
+@media(max-width: 480px) {
+
+   .sidebar[data-open="true"] {
+      width: 100%;
+      padding: 2.5rem 1rem;
+   }
+
+   .menu-btn {
+      inset-block-start: 1rem;
+      inset-inline-start: 1rem;
+      padding: 0;
+   }
+
+   .theme-toggle {
+      inset-block-start: 1rem;
+      inset-inline-end: 0.5rem;
+   }
+
+   .menu__link {
+      padding: 0;
+   }
+
+   .tasks__filters {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem 3rem;
+      font-size: 1rem;
+   }
+
+   .tasks__count {
+      font-size: 1rem;
+   }
+
+   .tasks__item {
+      padding: 0.75rem 1rem;
+   }
+
+   .tasks__label {
+      gap: 1rem;
+   }
+
+   .tasks__actions {
+      gap: 1rem;
+   }
+
+   .tasks__empty-text {
+      font-size: 0.87rem;
+   }
+
+   .icon--md {
+      width: 18px;
+      height: 18px;
+   }
+
+   .back-btn {
+      inset-block-start: 1rem;
+      inset-inline-start: 0.5rem;
+   }
+}

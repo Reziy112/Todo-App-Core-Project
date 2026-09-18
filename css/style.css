@@ -1,0 +1,954 @@
+/*==================================================
+=                    SIDEBAR                      =
+==================================================*/
+
+/* Контейнер sidebar */
+.sidebar {
+   display: flex;
+   flex-direction: column;
+   width: clamp(80px, 12vw, 130px);
+   min-height: 100dvh;
+   padding: clamp(1rem, 3vw, 2.5rem) clamp(0.5rem, 2vw, 0.8rem);
+   background-color: var(--color-bg-sidebar);
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+   transition:
+      transform 0.3s ease,
+      padding 0.3s ease,
+      background-color var(--transition-base);
+}
+
+
+/* Раскрытое состояние */
+.sidebar[data-open="true"] {
+   width: clamp(260px, 30vw, 360px);
+   padding: 2.5rem 2rem;
+}
+
+.sidebar__content {
+   position: relative;
+   z-index: 10;
+}
+
+/* Header */
+.sidebar__header {
+   display: flex;
+   justify-content: center;
+}
+
+.sidebar[data-open="true"] .sidebar__header {
+   justify-content: flex-start;
+   margin-bottom: 1.85rem;
+}
+
+/* Кнопка меню */
+.menu-btn {
+   color: var(--color-text-primary);
+   padding: 0.3rem 1.25rem;
+   border-radius: 0.75rem;
+   position: absolute;
+   inset-block-start: 2rem;
+   inset-inline-start: 1.5rem;
+   z-index: 1000;
+   transition:
+      color var(--transition-base),
+      background-color var(--transition-base);
+}
+
+@media (hover: hover) {
+   .menu-btn:hover {
+      color: var(--color-text-hover);
+      background-color: var(--color-bg-hover);
+   }
+}
+
+/* Блок пользователя */
+.sidebar__user {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   transition: opacity 0.2s ease, transform 0.2s ease;
+   margin-top: 5rem;
+}
+
+/* Скрытое состояние пользователя */
+.sidebar[data-open="false"] .sidebar__user {
+   height: 0;
+   overflow: hidden;
+   opacity: 0;
+   transform: translateY(-8px);
+}
+
+.user__avatar {
+   width: 90px;
+   height: 90px;
+   border-radius: 50%;
+   margin-bottom: 1.75rem;
+}
+
+.user__name {
+   font-size: 1.5rem;
+   font-weight: 700;
+   margin-bottom: 0.5rem;
+}
+
+.user__email {
+   font-size: 1.25rem;
+   color: var(--color-text-muted);
+}
+
+/* Разделитель */
+.divider {
+   width: 100%;
+   height: 1px;
+   background-color: var(--color-text-muted);
+   margin: 1.85rem 0 2.25rem;
+}
+
+/* Меню */
+.menu__list {
+   display: flex;
+   flex-direction: column;
+   gap: 2rem;
+}
+
+.menu__link {
+   display: flex;
+   align-items: center;
+   gap: 2.75rem;
+   width: stretch;
+   font-size: 1.5rem;
+   font-weight: 700;
+   padding: 0.75rem 1.25rem;
+   border-radius: 0.75rem;
+   transition:
+      background-color var(--transition-base),
+      color var(--transition-base),
+      transform 0.1s ease;
+}
+
+.sidebar[data-open="false"] .menu__link {
+   justify-content: center;
+   gap: 0;
+   padding: 0.5rem 1.85rem;
+}
+
+@media (hover: hover) {
+   .menu__link:hover {
+      color: var(--color-text-hover);
+      background-color: var(--color-bg-hover)
+   }
+}
+
+.menu__link:active {
+   background-color: var(--color-bg-hover);
+   transform: scale(0.98);
+}
+
+.menu__link span {
+   display: inline-block;
+   white-space: nowrap;
+   transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar[data-open="true"] .menu__link span {
+   transition-delay: 0.15s;
+}
+
+.sidebar[data-open="false"] .menu__link span {
+   overflow: hidden;
+   pointer-events: none;
+   margin: 0;
+   padding: 0;
+   opacity: 0;
+   transform: translateX(-8px);
+}
+
+
+
+/*==================================================
+=                    CONTENT                      =
+==================================================*/
+
+.content {
+   display: flex;
+   flex-direction: column;
+   flex: 1;
+   min-width: 0;
+   min-height: 0;
+}
+
+.screens {
+   position: relative;
+   flex: 1;
+   overflow: hidden;
+}
+
+/*==================================================
+=                    SCREEN                       =
+==================================================*/
+
+.screen {
+   position: absolute;
+   inset: 0;
+   display: flex;
+   flex-direction: column;
+   padding-top: 5rem;
+   background-color: var(--color-bg-content);
+   overflow-y: auto;
+   transform: translateX(100%);
+   transition: transform 0.5s ease;
+}
+
+.screen.is-active {
+   transform: translateX(0);
+}
+
+
+/*==================================================
+=                 THEME TOGGLE                    =
+==================================================*/
+
+.theme-toggle {
+   position: absolute;
+   z-index: 10;
+   inset-block-start: 2.8rem;
+   /* отступ сверху */
+   inset-inline-end: 2rem;
+   /* отступ справа */
+   transition: color 0.2s ease, transform 0.1s ease;
+}
+
+
+@media (hover: hover) {
+   .theme-toggle:hover {
+      color: #facc15;
+   }
+}
+
+.theme-toggle:active {
+   transform: scale(0.95);
+}
+
+
+/*==================================================
+=                    TASKS                        =
+==================================================*/
+
+/* Контейнер задач */
+.container {
+   width: 100%;
+   max-width: 690px;
+   padding-inline: 0.6rem;
+   margin-inline: auto;
+   display: flex;
+   flex-direction: column;
+   flex: 1;
+}
+
+/* Header задач */
+.screen__header {
+   text-align: center;
+   margin-bottom: 3.75rem;
+}
+
+.screen__title {
+   font-size: 3rem;
+   font-weight: 700;
+   margin-bottom: 0.5rem;
+}
+
+.screen__subtitle {
+   font-size: 1.5rem;
+   color: var(--color-text-muted);
+   font-style: italic;
+   letter-spacing: 1px;
+}
+
+
+/*==================================================
+=              STICKY CONTROLS                    =
+==================================================*/
+
+.tasks__controls {
+   position: sticky;
+   inset-block-start: 0;
+   z-index: 10;
+   padding-bottom: 1rem;
+   margin-bottom: 1.75rem;
+   background-color: var(--color-bg-content);
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.tasks__controls.is-scrolled {
+   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Форма добавления */
+.tasks__form {
+   display: flex;
+   gap: 1.75rem;
+   margin-bottom: 3.75rem;
+}
+
+.tasks__input {
+   min-width: 0;
+   flex: 1 1 auto;
+   font-size: 1.5rem;
+   color: var(--color-text-primary);
+   padding: 1rem 3rem 1rem 1.5rem;
+   background-color: var(--color-bg-input);
+   border-radius: 0.75rem;
+   border: none;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+   transition:
+      background-color var(--transition-base),
+      color var(--transition-base),
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
+}
+
+.tasks__input::placeholder {
+   color: #A9A9A9;
+}
+
+/* Кнопка Add */
+.tasks__add-btn {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: 0.5rem;
+   font-weight: 700;
+   color: #fff;
+   background-color: var(--color-bg-button-primary);
+   padding: 1rem 2.5rem;
+   border-radius: 0.75rem;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+   transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.tasks__add-btn::before {
+   content: "+";
+}
+
+@media (hover: hover) {
+   .tasks__add-btn:hover {
+      background-color: var(--color-success);
+   }
+}
+
+.tasks__add-btn:active {
+   transform: scale(0.97);
+   filter: brightness(0.95);
+}
+
+
+/*==================================================
+=                   FILTERS                       =
+==================================================*/
+
+.tasks__filters {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.tasks__filter-group {
+   display: flex;
+   gap: 1rem;
+}
+
+.tasks__filter {
+   font-size: 1.25rem;
+   color: var(--color-text-muted);
+   transition: color 0.2s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+   .tasks__filter:hover {
+      color: var(--color-text-primary);
+   }
+}
+
+.tasks__filter:active {
+   transform: scale(0.95);
+}
+
+.tasks__filter--active {
+   color: var(--color-text-primary);
+}
+
+.tasks__count {
+   font-size: 1.25rem;
+   color: var(--color-text-muted);
+}
+
+
+/*==================================================
+=                 EMPTY STATE                     =
+==================================================*/
+
+.tasks__empty {
+   flex: 1;
+   display: none;
+   align-items: center;
+   justify-content: center;
+   gap: 1.75rem;
+}
+
+.tasks--empty .container {
+   overflow: visible;
+   min-height: auto;
+}
+
+.tasks--empty .tasks__empty {
+   display: flex;
+}
+
+.tasks__empty-text {
+   font-size: 1.2rem;
+   font-style: italic;
+   max-inline-size: 40ch;
+}
+
+.tasks--empty .tasks__filters,
+.tasks--empty .tasks__list {
+   display: none;
+}
+
+.tasks--empty .tasks__controls {
+   padding: 0;
+   margin-bottom: 4.4rem;
+   box-shadow: none;
+}
+
+.tasks--empty .tasks__form {
+   margin-bottom: 0;
+}
+
+
+/*==================================================
+=                 TASK CARD                       =
+==================================================*/
+
+.tasks__item {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 1rem;
+   padding: 1.75rem 2rem 1.75rem 1.5rem;
+   margin-bottom: 1.5rem;
+
+   background-color: var(--color-bg-task);
+   border-radius: 0.75rem;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+
+   transition: transform 0.15s ease, box-shadow 0.15s ease;
+   content-visibility: auto;
+   /* Браузер не отрисовывает содержимое элемента,
+      пока оно не нужно пользователю.
+      Полезно для ускорения длинных списков. */
+
+   contain-intrinsic-size: 80px;
+   /* Задаёт примерный размер элемента,
+      пока его содержимое ещё не отрисовано.
+      Помогает браузеру правильно рассчитать высоту
+      и избежать скачков layout. */
+}
+
+@media (hover: hover) {
+   .tasks__item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+   }
+}
+
+/* ===== Состояние выполненной задачи ===== */
+.tasks__item--completed .tasks__text {
+   text-decoration: line-through;
+   color: var(--color-text-muted);
+}
+
+
+/*==================================================
+=                  CHECKBOX                       =
+==================================================*/
+
+.tasks__label {
+   display: flex;
+   align-items: center;
+   gap: 1.75rem;
+}
+
+.tasks__checkbox {
+   appearance: none;
+   width: 20px;
+   height: 20px;
+   border: 2px solid var(--color-text-primary);
+   border-radius: 5px;
+   display: grid;
+   place-content: center;
+   flex-shrink: 0;
+   cursor: pointer;
+   transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.tasks__checkbox:checked {
+   background-color: #000;
+   border-color: #000;
+}
+
+.tasks__checkbox::after {
+   content: "";
+   width: 10px;
+   height: 10px;
+   transform: scale(0);
+   transition: transform 0.15s ease;
+   background-color: #fff;
+   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%);
+}
+
+.tasks__checkbox:checked::after {
+   transform: scale(1);
+}
+
+.tasks__text {
+   overflow-wrap: anywhere;
+   /* Разрешает переносить очень длинное слово
+      или строку в любом месте.
+      Предотвращает вылезание текста за границы блока. */
+}
+
+
+/*==================================================
+=                 EDIT INPUT                    =
+==================================================*/
+
+.tasks__edit-input {
+   font-size: 1.5rem;
+   color: var(--color-text-primary);
+   background-color: transparent;
+   border: none;
+}
+
+
+/*==================================================
+=                 TASK ACTIONS                    =
+==================================================*/
+
+.tasks__actions {
+   display: flex;
+   gap: 1.75rem;
+}
+
+.tasks__edit,
+.tasks__delete {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: color 0.2s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+
+   .tasks__edit:hover {
+      color: var(--color-success);
+   }
+
+   .tasks__delete:hover {
+      color: var(--color-danger);
+   }
+
+}
+
+.tasks__edit:active,
+.tasks__delete:active {
+   transform: scale(0.95);
+}
+
+
+/*==================================================
+=                 TASK SCROLLBAR                   =
+==================================================*/
+
+/* Firefox */
+.tasks,
+.settings {
+   display: flex;
+   flex-direction: column;
+   overflow-y: auto;
+}
+
+
+/* Chrome / Edge / Safari */
+.tasks::-webkit-scrollbar {
+   width: 6px;
+}
+
+.tasks::-webkit-scrollbar-track {
+   background: transparent;
+}
+
+.tasks::-webkit-scrollbar-thumb {
+   background-color: var(--scrollbar-thumb);
+   border-radius: 999px;
+   transition: background-color 0.2s ease;
+}
+
+/* Hover — просто чуть плотнее */
+.tasks::-webkit-scrollbar-thumb:hover {
+   background-color: light-dark(rgba(100, 100, 100, 0.55),
+         rgba(180, 180, 180, 0.55));
+}
+
+.tasks.tasks--empty {
+   overflow: visible;
+}
+
+
+
+/*==================================================
+=                    SCREEN--SETTINGS              =
+==================================================*/
+
+.settings__header {
+   margin-bottom: 2rem;
+}
+
+.settings-group__title {
+   margin-bottom: 1.5rem;
+}
+
+.settings-group__list {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+.settings__divider {
+   margin: 1.85rem 0 1rem;
+}
+
+.settings-group__item {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.settings-group__label {
+   font-size: 1.25rem;
+   color: var(--color-accent-settings);
+}
+
+.settings-group__select {
+   font-weight: 700;
+   text-align: center;
+   cursor: pointer;
+   padding: 0.18rem 0.3rem;
+   border: none;
+   border-radius: 5px;
+   color: var(--color-on-accent);
+   background-color: var(--color-accent-settings);
+   appearance: none;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+}
+
+.settings-group__select option {
+   font-weight: 700;
+   text-align: center;
+}
+
+.toggle-switch {
+   position: relative;
+   display: inline-block;
+   width: 40px;
+   height: 21px;
+   cursor: pointer;
+}
+
+.toggle-switch__input {
+   position: absolute;
+   inset: 0;
+   /* 🔥 важно */
+   opacity: 0;
+   cursor: pointer;
+   z-index: 2;
+}
+
+.toggle-switch__background {
+   position: absolute;
+   inset: 0;
+   background-color: var(--color-accent-settings);
+   border-radius: 20px;
+   transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-switch__handle {
+   position: absolute;
+   top: 3px;
+   left: 5px;
+   width: 15px;
+   height: 15px;
+   background-color: #fff;
+   border-radius: 50%;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+   transition: transform 0.3s ease-in-out;
+}
+
+/* checked состояние */
+.toggle-switch__input:checked+.toggle-switch__background {
+   background-color: var(--color-toggle-active);
+}
+
+.toggle-switch__input:checked+.toggle-switch__background .toggle-switch__handle {
+   transform: translateX(16px);
+}
+
+.settings-group__clear-btn {
+   padding: 0.18rem 0.3rem;
+   border-radius: 5px;
+   background-color: var(--color-accent-settings);
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--color-on-accent);
+   display: inline-block;
+   text-transform: uppercase;
+   transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+   .settings-group__clear-btn:hover {
+      color: #ffffff;
+      background-color: var(--color-danger);
+   }
+}
+
+.settings-group__clear-btn:active {
+   transform: scale(0.97);
+   filter: brightness(0.95);
+}
+
+.settings-group__info-btn {
+   display: inline-block;
+   font-size: 1.25rem;
+   color: var(--color-accent-settings);
+   padding: 0.18rem 0.3rem;
+   border-radius: 5px;
+   transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+   .settings-group__info-btn:hover {
+      background-color: var(--color-accent-settings);
+      color: #ffffff;
+   }
+}
+
+.settings-group__info-btn:active {
+   transform: scale(0.97);
+}
+
+
+
+/*==================================================
+=                    SCREEN--ABOUT              =
+==================================================*/
+
+.screen--about {
+   position: relative;
+}
+
+.back-btn {
+   position: absolute;
+   inset-block-start: 2.8rem;
+   inset-inline-start: 2rem;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 50%;
+
+   /* 🔥 плавность */
+   transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+}
+
+@media (hover: hover) {
+   .back-btn:hover {
+      transform: scale(1.05);
+      background-color: var(--color-bg-hover);
+      color: var(--color-text-hover);
+   }
+}
+
+.back-btn:active {
+   transform: scale(0.95);
+}
+
+.about__title {
+   font-size: 3rem;
+   font-weight: 600;
+}
+
+.about__content {
+   display: flex;
+   flex-direction: column;
+   gap: 2.85rem;
+}
+
+.about__subtitle {
+   margin-bottom: 1.5rem;
+}
+
+.about__text {
+   font-size: 1.25rem;
+   text-wrap: pretty;
+   color: var(--color-accent-settings);
+}
+
+.about__version {
+   display: block;
+   text-align: center;
+   margin-top: 2.85rem;
+
+}
+
+
+
+/*==================================================
+=                    FOOTER                       =
+==================================================*/
+
+.screen__footer {
+   font-size: clamp(0.87rem, 0.676rem + 0.37vw, 1.12rem);
+   text-align: center;
+   color: var(--color-text-muted);
+   padding: 2rem 0;
+}
+
+
+
+
+
+/*==================================================
+=                    MODAL  (dialog)              =
+==================================================*/
+
+.modal {
+   margin: auto;
+   width: 100%;
+   max-width: min(90vw, 400px);
+
+   /* 👇 вместо height */
+   /* min-height: 200px; */
+   max-height: 90vh;
+
+   text-align: center;
+   padding: 0;
+
+   border-radius: 12px;
+   background: var(--color-bg-task);
+   color: var(--color-text-primary);
+
+   box-shadow: 0 10px 30px rgb(0 0 0 / 0.2);
+
+   transform: scale(0.92);
+   transition: var(--transition-base);
+}
+
+@starting-style {
+   .modal[open] {
+      opacity: 0;
+      transform: scale(0.95);
+   }
+}
+
+.modal__content {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   gap: clamp(8px, 2vw, 16px);
+   padding: 30px 20px 20px;
+   min-height: 200px;
+   /* 👇 защита от переполнения */
+   overflow: auto;
+}
+
+.modal::backdrop {
+   background: rgb(0 0 0 / 0.5);
+   backdrop-filter: blur(4px);
+   opacity: 0;
+   transition: var(--transition-base);
+}
+
+.modal[open]::backdrop {
+   opacity: 1;
+}
+
+.modal.closing {
+   opacity: 0;
+   transform: scale(0.95);
+}
+
+.modal__text {
+   font-size: clamp(1.5rem, 1.424rem + 0.38vw, 1.875rem);
+   font-weight: 600;
+   line-height: 1.5;
+}
+
+.modal__buttons {
+   display: flex;
+   justify-content: center;
+   gap: 30px;
+}
+
+.modal__btn {
+   padding: 8px 14px;
+   border-radius: 10px;
+   cursor: pointer;
+   transition: var(--transition-base), transform 0.1s ease;
+}
+
+/* ================== CONFIRM ================== */
+
+.confirm__btn {
+   background: var(--color-danger);
+   color: white;
+   border: none;
+}
+
+@media (hover: hover) {
+   .confirm__btn:hover {
+      filter: brightness(0.9);
+   }
+}
+
+.confirm__btn:active {
+   transform: scale(0.97);
+   filter: brightness(0.85);
+}
+
+/* ================== CANCEL ================== */
+
+.cancel__btn {
+   background: var(--color-bg-input);
+   color: var(--color-text-primary);
+   border: 1px solid var(--color-text-muted);
+}
+
+@media (hover: hover) {
+   .cancel__btn:hover {
+      background: var(--color-bg-hover);
+      color: var(--color-on-accent);
+      border-color: var(--color-text-primary);
+   }
+}
+
+.cancel__btn:active {
+   transform: scale(0.97);
+   filter: brightness(0.95);
+}

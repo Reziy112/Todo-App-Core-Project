@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="css/normalize.css">
+   <link rel="stylesheet" href="css/base.css">
+   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="css/media.css">
+   <title>Todo App</title>
+</head>
+
+<body>
+
+   <div class="app">
+
+      <div class="layout">
+
+         <!-- Кнопка открытия сайтбара -->
+
+         <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+            <svg class="icon icon--lg" width="32" height="32" viewBox="0 0 42 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" aria-hidden="true">
+               <path d="M2 2H40" />
+               <path d="M2 16H40" />
+               <path d="M2 30H40" />
+            </svg>
+         </button>
+
+         <button class="overlay" type="button" aria-label="Close menu"></button>
+
+
+         <!-- Сайтбар -->
+         <aside class="sidebar" id="sidebar" data-open="false">
+
+            <div class="sidebar__content">
+               <div class="sidebar__user">
+                  <img class="user__avatar" src="images/user-photo.webp" alt="User Photo">
+                  <p class="user__name">Jane Doe</p>
+                  <p class="user__email">janedoe@gmail.com</p>
+               </div>
+
+               <div class="divider sidebar__divider"></div>
+
+               <nav class="sidebar__menu" aria-label="Main navigation">
+
+                  <ul class="menu__list">
+                     <li class="menu__item">
+                        <button class="menu__link menu__link--task" type="button">
+                           <svg class="icon icon--lg" viewBox="0 0 48 48" aria-hidden="true">
+                              <path d="M26 10h16M26 24h16M26 38h16" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+
+                              <path d="M6 34l4 4 8-8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+                              <rect x="6" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+                           </svg>
+                           <span data-i18n="sidebar.myTasks"></span>
+                        </button>
+                     </li>
+                     <li class="menu__item">
+                        <button class="menu__link menu__link--settings" type="button">
+                           <svg class="icon icon--lg" viewBox="0 0 48 48" aria-hidden="true">
+                              <path d="M19.342 8.272C19.4522 7.11268 19.9907 6.03609 20.8522 5.25256C21.7137 4.46903 22.8365 4.03485 24.001 4.03485C25.1655 4.03485 26.2883 4.46903 27.1498 5.25256C28.0113 6.03609 28.5498 7.11268 28.66 8.272C28.7262 9.02091 28.9719 9.74284 29.3763 10.3767C29.7806 11.0105 30.3317 11.5376 30.9829 11.9134C31.6341 12.2891 32.3663 12.5024 33.1174 12.5352C33.8685 12.5681 34.6165 12.4195 35.298 12.102C36.3562 11.6216 37.5553 11.552 38.662 11.907C39.7687 12.2619 40.7037 13.0159 41.285 14.0222C41.8664 15.0285 42.0526 16.2151 41.8073 17.3511C41.562 18.4871 40.9028 19.4912 39.958 20.168C39.3428 20.5997 38.8405 21.1732 38.4938 21.84C38.1471 22.5069 37.9661 23.2474 37.9661 23.999C37.9661 24.7506 38.1471 25.4911 38.4938 26.1579C38.8405 26.8248 39.3428 27.3983 39.958 27.83C40.9028 28.5068 41.562 29.5109 41.8073 30.6469C42.0526 31.7829 41.8664 32.9695 41.285 33.9758C40.7037 34.9821 39.7687 35.7361 38.662 36.091C37.5553 36.446 36.3562 36.3764 35.298 35.896C34.6165 35.5785 33.8685 35.4299 33.1174 35.4628C32.3663 35.4956 31.6341 35.7089 30.9829 36.0846C30.3317 36.4604 29.7806 36.9875 29.3763 37.6213C28.9719 38.2552 28.7262 38.9771 28.66 39.726C28.5498 40.8853 28.0113 41.9619 27.1498 42.7454C26.2883 43.529 25.1655 43.9631 24.001 43.9631C22.8365 43.9631 21.7137 43.529 20.8522 42.7454C19.9907 41.9619 19.4522 40.8853 19.342 39.726C19.2759 38.9768 19.0302 38.2546 18.6257 37.6205C18.2213 36.9865 17.6699 36.4592 17.0185 36.0834C16.367 35.7077 15.6345 35.4944 14.8832 35.4618C14.1318 35.4292 13.3836 35.5781 12.702 35.896C11.6438 36.3764 10.4447 36.446 9.338 36.091C8.23135 35.7361 7.29634 34.9821 6.71497 33.9758C6.13359 32.9695 5.94743 31.7829 6.19272 30.6469C6.43801 29.5109 7.0972 28.5068 8.042 27.83C8.65724 27.3983 9.15946 26.8248 9.50618 26.1579C9.85289 25.4911 10.0339 24.7506 10.0339 23.999C10.0339 23.2474 9.85289 22.5069 9.50618 21.84C9.15946 21.1732 8.65724 20.5997 8.042 20.168C7.09853 19.4909 6.4405 18.4872 6.1958 17.352C5.9511 16.2167 6.13722 15.0311 6.71797 14.0254C7.29872 13.0198 8.23262 12.266 9.33818 11.9105C10.4437 11.555 11.642 11.6233 12.7 12.102C13.3815 12.4195 14.1295 12.5681 14.8806 12.5352C15.6317 12.5024 16.3639 12.2891 17.0151 11.9134C17.6663 11.5376 18.2174 11.0105 18.6217 10.3767C19.0261 9.74284 19.2718 9.02091 19.338 8.272" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                              <circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="4" />
+                           </svg>
+                           <span data-i18n="sidebar.settings"></span>
+                        </button>
+                     </li>
+                  </ul>
+
+               </nav>
+            </div>
+
+         </aside>
+
+         <main class="content" id="main-content">
+
+            <!-- Кнопка смены темы -->
+            <button class="theme-toggle" type="button" aria-label="Toggle theme">
+               <!-- Луна -->
+               <svg class="icon icon-moon icon--lg" viewBox="0 0 40 40" aria-hidden="true">
+                  <path d="M37.9738 20.9456C37.7864 24.4179 36.5972 27.7616 34.55 30.5724C32.5028 33.3833 29.6852 35.541 26.4379 36.7847C23.1905 38.0284 19.6525 38.3049 16.2514 37.5807C12.8503 36.8565 9.73174 35.1627 7.27276 32.704C4.81377 30.2452 3.11961 27.1269 2.39507 23.7258C1.67053 20.3248 1.94662 16.7867 3.18999 13.5393C4.43335 10.2918 6.59075 7.47401 9.40138 5.42651C12.212 3.379 15.5556 2.18945 19.0278 2.00164C19.8378 1.95764 20.2618 2.92164 19.8318 3.60764C18.3936 5.90874 17.7778 8.62938 18.0848 11.3255C18.3919 14.0217 19.6037 16.5342 21.5225 18.453C23.4413 20.3718 25.9538 21.5836 28.6499 21.8906C31.3461 22.1977 34.0667 21.5819 36.3678 20.1436C37.0558 19.7136 38.0178 20.1356 37.9738 20.9456Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+
+               <!-- Солнце -->
+               <svg class="icon icon-sun icon--lg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="4" />
+
+                  <path d="M24 4v4M24 40v4M4 24h4M40 24h4
+                                            M9.86 9.86l2.82 2.82
+                                            M35.32 35.32l2.82 2.82
+                                            M9.86 38.14l2.82-2.82
+                                            M35.32 12.68l2.82-2.82" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+               </svg>
+
+            </button>
+
+            <!-- Экраны -->
+            <div class="screens">
+               <div class="screens__inner">
+
+                  <!-- Экран заданий -->
+                  <section class="screen screen--tasks">
+
+                     <div class="container tasks">
+
+                        <!-- Header -->
+                        <header class="screen__header tasks__header">
+                           <h1 class="screen__title" data-i18n="tasks.title"></h1>
+                           <p class="screen__subtitle" data-i18n="tasks.subtitle"></p>
+                        </header>
+
+                        <div class="tasks__controls">
+
+                           <!-- Добавление задач -->
+                           <form class="tasks__form" autocomplete="off">
+                              <label for="task-input" class="visually-hidden" data-i18n="tasks.addLabel">Add task</label>
+
+                              <input id="task-input" class="tasks__input" data-i18n="tasks.placeholder" type="text" placeholder="Add a new task..." required>
+
+                              <button class="tasks__add-btn" type="submit" data-i18n="tasks.addButton">Add</button>
+                           </form>
+
+                           <!-- Фильтры -->
+                           <div class="tasks__filters">
+                              <div class="tasks__filter-group">
+                                 <button class="tasks__filter tasks__filter--active" type="button" aria-pressed="true" data-filter="all" data-i18n="tasks.filters.all">All</button>
+
+                                 <button class="tasks__filter" type="button" aria-pressed="false" data-filter="active" data-i18n="tasks.filters.active">Active</button>
+
+                                 <button class="tasks__filter" type="button" aria-pressed="false" data-filter="completed" data-i18n="tasks.filters.completed">Completed</button>
+                              </div>
+
+                              <span class="tasks__count" aria-live="polite"></span>
+                           </div>
+
+                        </div>
+
+
+                        <!-- Empty state -->
+                        <div class="tasks__empty">
+                           <img class="tasks__empty-img" src="images/empty-img1.png" alt="">
+                           <p class="tasks__empty-text" data-i18n="tasks.emptyState.text"></p>
+                        </div>
+
+
+                        <!-- Список задач -->
+                        <ul class="tasks__list"></ul>
+
+                     </div>
+
+                  </section>
+
+
+                  <!-- Экран настроек -->
+                  <section class="screen screen--settings">
+
+                     <div class="container settings">
+
+                        <!-- Header -->
+                        <header class="screen__header settings__header">
+                           <h1 class="screen__title" data-i18n="settings.title"></h1>
+                        </header>
+
+                        <div class="settings__inner">
+
+                           <div class="divider settings__divider"></div>
+
+                           <!-- Общие задачи -->
+                           <fieldset class="settings-group settings-group--general">
+                              <!-- Тег <fieldset> используется в HTML для логической группировки связанных элементов и полей внутри веб-формы. -->
+
+                              <legend class="settings-group__title" data-i18n="settings.general.title"></legend>
+                              <!-- <legend> — это название/заголовок <fieldset>, задает понятную подпись (название) для всей группы полей -->
+
+                              <ul class="settings-group__list">
+
+                                 <!-- Language -->
+                                 <li class="settings-group__item">
+                                    <label for="language" class="settings-group__label" data-i18n="settings.general.language"></label>
+
+                                    <select class="settings-group__select" id="language" name="lang">
+                                       <option value="en" selected>English</option>
+                                       <option value="ru">Russian</option>
+                                    </select>
+                                 </li>
+
+                                 <!-- Auto Clear -->
+                                 <li class="settings-group__item">
+
+                                    <label for="auto-clear" class="settings-group__label">
+                                       <span data-i18n="settings.general.autoClear"></span>
+                                    </label>
+
+                                    <div class="toggle-switch">
+                                       <input id="auto-clear" class="toggle-switch__input" type="checkbox">
+
+                                       <div class="toggle-switch__background">
+                                          <div class="toggle-switch__handle"></div>
+                                       </div>
+                                    </div>
+
+                                 </li>
+
+                                 <!-- Confirm Delete -->
+                                 <li class="settings-group__item">
+
+                                    <label for="confirm-delete" class="settings-group__label">
+                                       <span data-i18n="settings.general.confirmDelete"></span>
+                                    </label>
+
+                                    <div class="toggle-switch">
+                                       <input id="confirm-delete" class="toggle-switch__input" type="checkbox">
+
+                                       <div class="toggle-switch__background">
+                                          <div class="toggle-switch__handle"></div>
+                                       </div>
+                                    </div>
+
+                                 </li>
+
+                              </ul>
+
+                           </fieldset>
+                        </div>
+
+                        <div class="divider settings__divider"></div>
+
+                        <!-- Удаление всех задач -->
+                        <div class="settings-group settings-group--data">
+                           <h2 class="settings-group__title" data-i18n="settings.data.title"></h2>
+
+                           <div class="settings-group__item">
+                              <span class="settings-group__label" data-i18n="settings.data.clearAll"></span>
+                              <button class="settings-group__clear-btn" type="button" data-i18n="settings.data.cleanButton"></button>
+                           </div>
+
+                        </div>
+
+                        <div class="divider settings__divider"></div>
+
+                        <!-- Инфо -->
+                        <div class="settings-group settings-group--info">
+                           <h2 class="settings-group__title" data-i18n="settings.info.title"></h2>
+
+                           <button class="settings-group__info-btn" type="button" data-i18n="settings.info.about"></button>
+                        </div>
+
+                     </div>
+
+                  </section>
+
+
+                  <!-- Экран Инфо -->
+                  <section class="screen screen--about">
+                     <div class="container about">
+
+                        <button class="back-btn" aria-label="go to back">
+                           <svg class="icon icon--lg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                              <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" />
+
+
+                              <path d="M30 14L18 24L30 34" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                           </svg>
+                        </button>
+
+                        <header class="screen__header about__header">
+                           <h1 class="about__title" data-i18n="about.title"></h1>
+                        </header>
+
+                        <div class="about__content">
+
+                           <div class="about__block">
+                              <h2 class="about__subtitle" data-i18n="about.sections.what.title"></h2>
+                              <p class="about__text" data-i18n="about.sections.what.text"></p>
+                           </div>
+
+                           <div class="about__block">
+                              <h2 class="about__subtitle" data-i18n="about.sections.features.title"></h2>
+                              <p class="about__text" data-i18n="about.sections.features.text"></p>
+                           </div>
+
+                           <div class="about__block">
+                              <h2 class="about__subtitle" data-i18n="about.sections.how.title"></h2>
+                              <p class="about__text" data-i18n="about.sections.how.text"></p>
+                           </div>
+
+                        </div>
+
+                        <p class="about__version">
+                           <span data-i18n="about.version"></span>
+                           1.0
+                        </p>
+
+                     </div>
+                  </section>
+
+               </div>
+
+            </div>
+
+         </main>
+
+         <footer class="screen__footer">
+            <p data-i18n="footer.copyright"></p>
+         </footer>
+
+      </div>
+
+   </div>
+
+
+
+   <!-- ========== Модельное окно (dialog) ========== -->
+
+   <dialog class="modal" data-modal aria-describedby="modal-text">
+
+      <div class="modal__content">
+         <p class="modal__text" id="modal-text"></p>
+
+         <div class="modal__buttons">
+            <button class="modal__btn confirm__btn" type="button" data-action="confirm" data-i18n="modal.confirm">Confirm</button>
+            <button class="modal__btn cancel__btn" type="button" data-action="cancel" data-i18n="modal.cancel">Cancel</button>
+         </div>
+
+      </div>
+
+   </dialog>
+
+
+
+
+
+   <script src="js/main.js"></script>
+
+</body>
+
+</html>
