@@ -3,6 +3,116 @@ const STORAGE_KEY = 'todo-app-data';
 
 
 
+// Сохраняет persistent-данные текущего состояния приложения.
+const saveState = () => {
+   // Собираем только те данные, которые должны переживать перезагрузку страницы.
+   const persistentData = {
+      tasks: state.tasks.items, // Список задач
+      settings: state.settings, // Пользовательские настройки
+   };
+
+   // Преобразуем объект в JSON-строку и сохраняем его в localStorage.
+   localStorage.setItem(STORAGE_KEY, JSON.stringify(persistentData));
+};
+/*
+Можно мысленно читать справа налево:
+
+persistentData — объект с тем, что хотим сохранить.
+JSON.stringify(persistentData) — превращаем объект в строку.
+STORAGE_KEY — имя, под которым храним данные.
+setItem() — записываем строку в localStorage.
+*/
+
+
+
+// Проверяет, соответствует ли восстановленный объект базовой структуре сохранённых данных приложения.
+const validateSavedData = (parsedData) => {
+   // Проверяем, что полученные данные существуют,
+   // являются объектом, содержат объект settings
+   // и массив tasks.
+   if (
+      parsedData !== null &&
+      typeof parsedData === 'object' &&
+      typeof parsedData.settings === 'object' &&
+      Array.isArray(parsedData.tasks)
+   ) {
+      // Если структура данных соответствует ожидаемой,
+      // возвращаем true.
+      return true;
+   }
+
+   // Если структура данных не соответствует ожидаемой,
+   // возвращаем false.
+   return false;
+};
+/*
+Можно мысленно читать справа налево:
+parsedData !== null 
+           ↓
+"parsedData не равен null?"
+   
+typeof parsedData === 'object'
+            ↓
+"parsedData — это объект?"
+
+typeof parsedData.settings === 'object'
+            ↓
+"parsedData.settings — это объект?"
+
+Array.isArray(parsedData.tasks)
+            ↓
+"parsedData.tasks — это массив?"
+*/
+
+
+
+// Восстанавливает persistent-данные из localStorage.
+const restoreState = () => {
+   // Получаем сохранённые данные по ключу.
+   // Если данных нет, getItem() возвращает null.
+   const savedData = localStorage.getItem(STORAGE_KEY);
+
+   // Продолжаем восстановление только если сохранённые данные существуют.
+   if (savedData) {
+      try {
+         // Преобразуем JSON-строку обратно в JavaScript-объект.
+         const parsedData = JSON.parse(savedData);
+
+         // Проверяем, соответствует ли объект базовой структуре
+         // сохранённых данных приложения.
+         const isValid = validateSavedData(parsedData);
+
+         // Если сохранённые данные соответствуют ожидаемой структуре,
+         // восстанавливаем их в state.
+         if (isValid) {
+            // Восстанавливаем сохранённый список задач.
+            state.tasks.items = parsedData.tasks;
+
+            // Восстанавливаем сохранённые настройки пользователя.
+            state.settings = parsedData.settings;
+         } else {
+            // Если сохранённые данные не соответствуют ожидаемой структуре,
+            // удаляем их из localStorage.
+            // state при этом остаётся с начальными данными.
+            localStorage.removeItem(STORAGE_KEY);
+         }
+      } catch {
+         // Если JSON повреждён и не может быть распарсен,
+         // удаляем некорректные данные из localStorage.
+         localStorage.removeItem(STORAGE_KEY);
+      }
+   }
+};
+
+
+
+
+
+
+
+
+
+
 /*
 // Проверяет одну задачу на соответствие базовой структуре.
 // Функция ничего не изменяет и только возвращает true или false.
@@ -150,6 +260,6 @@ const restoreState = () => {
       }
    }
 };
-*-
+*/
 
 
