@@ -31,5 +31,14 @@ const initialState = {
 // чтобы изменения state не изменяли initialState.
 // Теперь state содержит те же начальные значения, но является независимой копией.
 const state = structuredClone(initialState);
+/*
+structuredClone() — это встроенная функция JavaScript, которая создаёт глубокую независимую копию значения.Она копирует объект вместе с его вложенными объектами.
+*/
 
-// structuredClone() — это встроенная функция JavaScript, которая создаёт глубокую независимую копию значения.Она копирует объект вместе с его вложенными объектами.
+
+
+// Элементы DOM
+const elements = {
+   html: document.documentElement,
+   themeBtn: document.querySelector('.theme-toggle'),
+};

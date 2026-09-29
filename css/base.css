@@ -213,15 +213,32 @@ body {
    Переключение иконок солнце/луна
 ================================================== */
 
+/* По умолчанию скрываем обе иконки */
 .icon-sun,
 .icon-moon {
    display: none;
 }
 
+/* В системной тёмной теме показываем солнце */
+@media (prefers-color-scheme: dark) {
+   :root:not([data-theme]) .icon-sun {
+      display: block;
+   }
+}
+
+/* В системной светлой теме показываем луну */
+@media (prefers-color-scheme: light) {
+   :root:not([data-theme]) .icon-moon {
+      display: block;
+   }
+}
+
+/* При явно выбранной светлой теме показываем луну */
 :root[data-theme="light"] .icon-moon {
    display: block;
 }
 
+/* При явно выбранной тёмной теме показываем солнце */
 :root[data-theme="dark"] .icon-sun {
    display: block;
 }
