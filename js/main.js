@@ -53,12 +53,12 @@ system → data-theme удаляется
 
 
 // Общая функция рендера приложения.
-// Запускает отдельные render-функции,
-// которые синхронизируют состояние приложения с DOM.
+//  Запускает отдельные render-функции,которые синхронизируют состояние приложения с DOM.
 const render = () => {
    // Обновляет тему приложения в соответствии
    // с текущим значением themeMode в state.
    renderTheme();
+   renderTranslations();
 };
 
 
@@ -109,6 +109,215 @@ const handleThemeToggle = () => {
 // При нажатии браузер вызывает handleThemeToggle().
 elements.themeBtn.addEventListener('click', handleThemeToggle);
 
+
+
+// ********** Смена языков **********
+
+// Обновляет текстовые значения всех элементов интерфейса,
+// у которых в HTML указан атрибут data-i18n.
+
+// Общая задача функции:
+// 1. Узнать выбранный язык.
+// 2. Найти все элементы, которые нужно перевести.
+// 3. Получить ключ перевода каждого элемента.
+// 4. Найти по этому ключу нужный текст в объекте translations.
+// 5. Записать найденный перевод обратно в DOM.
+const renderTranslations = () => {
+
+   // Находим все элементы DOM, у которых есть атрибут data-i18n.
+
+   // Например:
+   // <h1 data-i18n="tasks.title"></h1>
+   // <button data-i18n="tasks.addButton"></button>
+
+   // querySelectorAll() возвращает коллекцию всех найденных элементов.
+   const translationElements = document.querySelectorAll('[data-i18n]');
+
+   // Получаем текущий выбранный язык из state.
+
+   // Например:
+   // state.settings.language → "en"
+   // или
+   // state.settings.language → "ru"
+   const lang = state.settings.language;
+
+   // Получаем объект переводов именно выбранного языка.
+
+   // Если:
+   // lang = "en"
+
+   // тогда:
+   // translations[lang] → translations["en"]
+
+   // Если:
+   // lang = "ru"
+
+   // тогда:
+   // translations[lang] → translations["ru"]
+   const langTranslations = translations[lang];
+
+   // Проходим по каждому найденному DOM-элементу.
+
+   // На каждой итерации переменная element
+   // содержит один конкретный элемент.
+   translationElements.forEach(element => {
+
+      // Получаем значение атрибута data-i18n
+      // у текущего элемента.
+
+      // Например, если HTML содержит:
+
+      // data-i18n="tasks.title"  тогда:
+      // key → "tasks.title"
+      const key = element.getAttribute('data-i18n');
+
+      // Разделяем ключ на отдельные части по точке.
+
+      // Например:
+
+      // "tasks.title"
+      //        ↓
+      // ["tasks", "title"]
+
+      // А:
+
+      // "settings.general.language"
+      //        ↓
+      // ["settings", "general", "language"]
+
+      // Эти части нужны, чтобы последовательно пройти
+      // по вложенным объектам translations.
+      const keyParts = key.split('.');
+
+      // В качестве начального значения translation
+      // берём весь объект переводов выбранного языка.
+
+      // Например:
+
+      // translation → translations["en"]
+
+      // Пока мы ещё не знаем конкретный текст.
+      // Поэтому начинаем с корня объекта переводов
+      // и дальше будем постепенно двигаться внутрь него.
+
+      // Здесь используется let, потому что значение translation
+      // будет изменяться внутри следующего цикла.
+      let translation = langTranslations;
+
+      // Проходим по каждой части ключа.
+
+      // Например, если:
+
+      // keyParts = ["tasks", "title"]
+      // цикл выполнится два раза:
+
+      // 1-й проход → part = "tasks"
+      // 2-й проход → part = "title"
+      keyParts.forEach(part => {
+
+         // Проверяем, существует ли текущее значение translation.        
+         // Это защита от ошибки.
+
+         // Если на каком-то этапе нужное свойство не существует,
+         // translation может стать undefined.
+
+         // В таком случае мы не пытаемся продолжать
+         // обращаться к следующему уровню объекта.
+         if (translation) {
+
+            // Переходим на следующий уровень объекта.
+
+            // part содержит имя свойства, поэтому используем
+            // квадратные скобки.
+
+            // Например:
+
+            // translation
+            //     ↓
+            // translation["tasks"]
+
+            // затем:
+
+            // translation
+            //     ↓
+            // translation["title"]
+
+            // В результате получаем конечный текст перевода.
+            translation = translation[part];
+         }
+      });
+
+      // Проверяем, удалось ли найти перевод.
+
+      // Если перевод не найден, translation может быть undefined.      
+      // В таком случае используем сам key.
+
+      // Например:
+
+      // key = "tasks.unknown"
+
+      // Если такого перевода нет,
+      // вместо пустого значения покажем:     
+      // "tasks.unknown"
+
+      // Это также помогает заметить ошибку в ключе перевода.
+      if (!translation) {
+         translation = key;
+      }
+
+      // Проверяем тип текущего HTML-элемента.
+
+      // INPUT обрабатывается отдельно,
+      // потому что текст подсказки у input находится
+      // не в textContent, а в свойстве placeholder.
+      if (element.tagName === 'INPUT') {
+
+         // Записываем найденный перевод
+         // в placeholder текущего input.
+         // Например:
+         // translation → "Type your task here..."
+         // результат:
+         // input.placeholder → "Type your task here..."
+         element.placeholder = translation;
+
+      } else {
+
+         // Для всех остальных элементов записываем перевод
+         // как обычное текстовое содержимое элемента.
+
+         // Например:
+
+         // <h1 data-i18n="tasks.title"></h1>         
+         // превращается в:         
+         // <h1 data-i18n="tasks.title">My Tasks</h1>
+         element.textContent = translation;
+      }
+   });
+};
+/*
+renderTranslations()
+│
+├── Найти элементы с data-i18n
+│
+├── Узнать текущий язык
+│
+├── Получить translations[язык]
+│
+└── Для каждого элемента
+    │
+    ├── Получить data-i18n
+    │
+    ├── Разделить ключ по "."
+    │
+    ├── Пройти по вложенному объекту
+    │
+    ├── Если перевода нет → использовать key
+    │
+    └── Записать перевод в DOM
+        │
+        ├── INPUT → placeholder
+        └── остальные → textContent
+*/
 
 
 
