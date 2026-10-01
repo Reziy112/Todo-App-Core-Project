@@ -10,7 +10,7 @@ const initialState = {
    // Временное состояние интерфейса.
    // Эти данные не сохраняются в localStorage.
    ui: {
-      currentScreen: 'tasks', // Экран, открываемый при запуске
+      currentScreen: 'settings', // Экран, открываемый при запуске
       sidebarOpen: false, // Sidebar закрыт при запуске
       modal: null, // Открытое модальное окно отсутствует
       modalData: null, // Данные для модального окна отсутствуют
@@ -239,6 +239,22 @@ const translations = {
 
 // Элементы DOM
 const elements = {
+   // Основной документ html
    html: document.documentElement,
+
+   // Кнопка изменения темы
    themeBtn: document.querySelector('.theme-toggle'),
+
+   // Основной контейнер sidebar
+   sidebar: document.querySelector('.sidebar'),
+
+   // Кнопка открытия / закрытия sidebar
+   menuBtn: document.querySelector('.menu-btn'),
+
+   // Фон Overlay
+   overlay: document.querySelector('.overlay'),
+
+   // Выпадающий список языков 'SELECT'
+   selectLang: document.querySelector('#language'),
+
 };

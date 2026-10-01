@@ -183,6 +183,10 @@ body {
    z-index: 150;
 }
 
+.overlay[data-open="true"] {
+   opacity: 1;
+   pointer-events: auto;
+}
 
 /* ==================================================
    СИСТЕМА ИКОНОК

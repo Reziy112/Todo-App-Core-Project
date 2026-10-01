@@ -22,6 +22,7 @@
 .sidebar[data-open="true"] {
    width: clamp(260px, 30vw, 360px);
    padding: 2.5rem 2rem;
+   z-index: 200;
 }
 
 .sidebar__content {

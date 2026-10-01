@@ -1,3 +1,5 @@
+// ********** Запуск приложения **********
+
 const init = () => {
    restoreState();
    render();
@@ -49,17 +51,6 @@ system → data-theme удаляется
 После этого CSS самостоятельно применяет
 соответствующую цветовую схему.
 */
-
-
-
-// Общая функция рендера приложения.
-//  Запускает отдельные render-функции,которые синхронизируют состояние приложения с DOM.
-const render = () => {
-   // Обновляет тему приложения в соответствии
-   // с текущим значением themeMode в state.
-   renderTheme();
-   renderTranslations();
-};
 
 
 // Обрабатывает нажатие кнопки переключения темы.
@@ -318,6 +309,217 @@ renderTranslations()
         ├── INPUT → placeholder
         └── остальные → textContent
 */
+
+
+// Синхронизирует элемент <select> языка с текущим значением
+// state.settings.language.
+// Функция получает язык из state и устанавливает соответствующее
+// значение для <select>, чтобы DOM отражал текущее состояние приложения.
+const renderSettings = () => {
+   // Получаем текущий выбранный язык из state.
+   // Это значение является источником истины для настроек приложения.
+   const currentLang = state.settings.language;
+
+   // Устанавливаем значение <select> равным языку из state.
+   // Браузер автоматически выбирает <option>,
+   // у которого значение value совпадает с currentLang.
+   elements.selectLang.value = currentLang;
+};
+
+
+// Обрабатывает изменение выбранного языка в элементе <select>.
+// Получает новое значение языка из DOM, записывает его в state,
+// сохраняет изменённое состояние в localStorage
+// и повторно отрисовывает интерфейс, чтобы применить новый язык.
+const handleLanguageChange = (e) => {
+   // Получаем значение выбранного пользователем <option>
+   // из элемента <select>.
+   const selectedLanguage = e.target.value;
+
+   // Обновляем язык в state.
+   // Теперь state.settings.language содержит язык,
+   // который выбрал пользователь.
+   state.settings.language = selectedLanguage;
+
+   // Сохраняем изменённое состояние в localStorage,
+   // чтобы выбранный язык сохранился после перезагрузки страницы.
+   saveState();
+
+   // Повторно отрисовываем интерфейс приложения.
+   // Во время render() renderTranslations() обновит тексты,
+   // а renderSettings() синхронизирует <select> со значением из state.
+   render();
+};
+
+// Подписываем функцию handleLanguageChange на событие change.
+// Когда пользователь выбирает другой язык в <select>,
+// браузер вызывает handleLanguageChange.
+elements.selectLang.addEventListener('change', handleLanguageChange);
+
+
+
+
+
+
+
+// ********** Sidebar **********
+
+// Обновляет состояние sidebar в DOM
+// на основе текущего значения state.ui.sidebarOpen.
+const renderSidebar = () => {
+
+   // Получаем текущее состояние sidebar из state.
+
+   // true  → sidebar должен быть открыт
+   // false → sidebar должен быть закрыт
+   const sidebarState = state.ui.sidebarOpen;
+
+   // Синхронизируем состояние sidebar с DOM.
+   // Устанавливаем атрибут data-open на sidebar.
+   //
+   // true  → data-open="true"  → sidebar открыт
+   // false → data-open="false" → sidebar закрыт
+   //
+   // CSS использует этот атрибут для отображения
+   // соответствующего состояния sidebar.
+   elements.sidebar.setAttribute('data-open', sidebarState);
+
+   // Синхронизируем состояние overlay с DOM.
+   //
+   // true  → data-open="true"  → overlay отображается
+   // false → data-open="false" → overlay скрыт
+   //
+   // CSS использует этот атрибут для показа или скрытия overlay.
+   elements.overlay.setAttribute('data-open', sidebarState);
+
+   // Обновляем ARIA-атрибут кнопки меню.
+   //
+   // aria-expanded сообщает вспомогательным технологиям,
+   // открыт ли сейчас sidebar.
+   //
+   // true  → sidebar открыт
+   // false → sidebar закрыт.
+   elements.menuBtn.setAttribute('aria-expanded', sidebarState);
+
+};
+
+
+// Меняет состояние sidebar и вызывает render.
+const handleMenuToggle = () => {
+   // инвертируем состояние:
+   // если было true → станет false
+   // если было false → станет true
+   state.ui.sidebarOpen = !state.ui.sidebarOpen;
+
+   // после изменения state — обновляем интерфейс
+   // (показываем или скрываем sidebar)
+   render();
+};
+
+// Закрывает sidebar по Escape, если он открыт.
+const handleEscape = (e) => {
+
+   // если нажата НЕ клавиша Escape — ничего не делаем
+   if (e.key !== 'Escape') return;
+
+   // если sidebar уже закрыт — ничего не делаем
+   if (!state.ui.sidebarOpen) return;
+
+   // закрываем sidebar (меняем состояние)
+   state.ui.sidebarOpen = false;
+
+   // после изменения state — обновляем интерфейс
+   render();
+
+   // Снимаем фокус с кнопки меню после закрытия sidebar по Escape.
+   // После нажатия Escape браузер может оставить фокус
+   // на кнопке меню. Убираем его, чтобы кнопка не оставалась
+   // визуально сфокусированной после закрытия sidebar.
+   elements.menuBtn.blur();
+};
+
+// Закрывает sidebar по клику на overlay.
+const handleOverlayClick = () => {
+   // если sidebar уже закрыт — ничего не делаем
+   if (!state.ui.sidebarOpen) return;
+
+   // закрываем sidebar (меняем состояние)
+   state.ui.sidebarOpen = false;
+
+   // после изменения state — обновляем интерфейс
+   render();
+};
+
+
+// Клик по кнопке меню
+elements.menuBtn.addEventListener('click', handleMenuToggle);
+
+// Закрытие sidebar по overlay
+elements.overlay.addEventListener('click', handleOverlayClick);
+
+// Закрытие sidebar по Escape
+document.addEventListener('keydown', handleEscape);
+
+
+
+// ********** Переключение экранов **********
+
+// Синхронизирует отображение экранов приложения с текущим состоянием state.
+// Определяет, какой экран должен быть активным, и добавляет is-active только ему,
+// одновременно удаляя этот класс у остальных экранов.
+const renderScreen = () => {
+   // Получаем все элементы экранов, чтобы проверить каждый из них
+   // и привести его активное состояние в соответствие с state.
+   const screens = document.querySelectorAll('.screen');
+
+   // Получаем из state имя экрана, который в данный момент должен быть активным.
+   const currentScreen = state.ui.currentScreen;
+
+   // Проверяем каждый экран и определяем, должен ли он быть активным.
+   screens.forEach(screen => {
+      // Получаем имя экрана из data-screen, чтобы сравнить его
+      // со значением текущего экрана из state.
+      const screenName = screen.dataset.screen;
+
+      // Если имя DOM-экрана совпадает с текущим экраном в state,
+      // делаем этот экран активным.
+      if (screenName === currentScreen) {
+         screen.classList.add('is-active');
+      } else {
+         // Если экран не является текущим, убираем is-active,
+         // чтобы одновременно активным оставался только нужный экран.
+         screen.classList.remove('is-active');
+      }
+   });
+};
+
+
+
+
+// Общая функция рендера приложения.
+//  Запускает отдельные render-функции,которые синхронизируют состояние приложения с DOM.
+const render = () => {
+
+   // Обновляем тему приложения
+   // в соответствии с текущим themeMode в state.
+   renderTheme();
+
+   // Обновляем тексты интерфейса
+   // в соответствии с выбранным языком в state.
+   renderTranslations();
+
+   // Обновляем элементы настроек
+   // в соответствии с текущими настройками в state.
+   renderSettings();
+
+   // Обновляем экраны
+   // в соответствии с выбранным экраном в state.
+   renderScreen();
+
+   // Обновляем состояние sidebar
+   // в соответствии с sidebarOpen в state.
+   renderSidebar();
+};
 
 
 
