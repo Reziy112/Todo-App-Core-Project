@@ -10,7 +10,7 @@ const initialState = {
    // Временное состояние интерфейса.
    // Эти данные не сохраняются в localStorage.
    ui: {
-      currentScreen: 'settings', // Экран, открываемый при запуске
+      currentScreen: 'tasks', // Экран, открываемый при запуске
       sidebarOpen: false, // Sidebar закрыт при запуске
       modal: null, // Открытое модальное окно отсутствует
       modalData: null, // Данные для модального окна отсутствуют
@@ -250,6 +250,9 @@ const elements = {
 
    // Кнопка открытия / закрытия sidebar
    menuBtn: document.querySelector('.menu-btn'),
+
+   // Кнопки меню
+   navButtons: document.querySelectorAll('button[data-screen]'),
 
    // Фон Overlay
    overlay: document.querySelector('.overlay'),
